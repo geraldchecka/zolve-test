@@ -39,11 +39,3 @@ function OtherApp() {
     </Switch>
   )
 }
-
-function AppVisualization() {
-  return <div>App Visualization</div>
-}
-
-function AppClipboard() {
-  return <div>App Clipboard</div>
-}

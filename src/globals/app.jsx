@@ -1,12 +1,12 @@
 import React from 'react';
 import AppRouter from './router';
-// global styles
+import { Global } from '../styles/globals.styled';
 
 export default function App() {
   return (
-    <div>
+    <Global>
       <AppRouter />
-    </div>
+    </Global>
   );
 }
 
