@@ -1,16 +1,16 @@
 import React from "react";
 import { NavLink, useLocation } from "react-router-dom";
-import { Nav, NavLink1 } from '../styles/globals.styled';
+import { NavPanel, NavSection } from '../styles/globals.styled';
 
 export default function Navigation() {
   const loc = useLocation();
 
   return (
-    <Nav>
+    <NavPanel>
       <NavigationLink to="/visualization">Visualization</NavigationLink> 
       <NavigationLink to="/clipboard">Clipboard</NavigationLink> 
       <NavigationLink to="/camera">Camera</NavigationLink> 
-    </Nav>
+    </NavPanel>
   )
 }
 
@@ -19,8 +19,8 @@ function NavigationLink(props) {
   const highlight = loc.pathname.split("/")[1] === props.to.split("/")[1];
 
   return (
-    <NavLink1 highlight={highlight}>
+    <NavSection highlight={highlight}>
       <NavLink {...props} activeClassName="is-active" />
-    </NavLink1>
+    </NavSection>
   );
 }

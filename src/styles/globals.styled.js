@@ -13,20 +13,24 @@ export const Global = styled.div`
   margin: 0 auto;
 `;
 
-export const Nav = styled.div`
+export const NavPanel = styled.ul`
   font-size: 16px;
   margin: 0 0 25px 0;
   background-color: rgba(128,128,128,0.39);
   line-height: 3rem;
+  padding: 0;
+  list-style-type: none;
 `;
 
-export const NavLink1 = styled.div`
+export const NavSection = styled.li`
   width: calc(100%/3);
   display: inline-block;
   text-align: center;
   background-color: ${({ highlight = false }) => { debugger; return highlight === true ? "red": null }};
-  :hover {
-    cursor: pointer;
+  .is-active {
+    :hover {
+      cursor: pointer;
+    }
   }
   a {
     text-decoration: none;
