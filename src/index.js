@@ -1,10 +1,12 @@
-import React from 'react';
+import React, { StrictMode } from 'react';
 import ReactDOM from 'react-dom';
-// import App from './App';
+import App from './globals/app';
 
 function Root() {
   return (
-    <p>Zolve App Test</p>
+    <StrictMode>
+      <App />
+    </StrictMode>
   )
 }
 
