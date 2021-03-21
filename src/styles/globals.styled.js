@@ -38,24 +38,6 @@ export const NavWrapper = styled.div`
   // overflow: hidden;
 `;
 
-export const NavSection = styled.li`
-  width: calc(100%/3);
-  display: inline-block;
-  text-align: center;
-  background-color: ${({ highlight = false }) => { return highlight === true ? "red": null }};
-  a {
-    text-decoration: none;
-    color: rgba(255, 255, 255, 1);
-    text-transform: uppercase;
-    letter-spacing: 1.5px;
-  }
-  .is-active {
-    :hover {
-      cursor: pointer;
-    }
-  }
-`;
-
 export const CustomLink = styled.a`
   width: calc(100%/3);
   display: inline-block;
