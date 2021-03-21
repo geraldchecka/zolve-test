@@ -10,6 +10,7 @@ import Navigation from './navigation';
 import Camera from '../pages/camera';
 import Clipboard from '../pages/clipboard';
 import Visualization from '../pages/visualization';
+import { Page } from "../styles/globals.styled";
 
 // optional: PWA, UT, SB, Linting & Prettier
 export default function AppRouter() {
@@ -21,7 +22,9 @@ export default function AppRouter() {
           <Redirect to="/visualization" />
         </Route>
         <Route path="*">
-          <OtherApp />
+          <Page>
+            <OtherApp />
+          </Page>
         </Route>
       </Switch>
     </Router>
