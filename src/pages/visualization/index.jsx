@@ -1,54 +1,62 @@
 import React, { useEffect, useState } from "react";
-import { searchMovies, getMovies } from "../../globals/network";
+import { getResults } from "../../globals/network";
 import { Container, InputWrapper, InputControl, Label, Input } from './visualization.styled';
+import ChartWrapper from "./chartWrapper";
 
 // Return date in YYYY-MM-DD Format
 function currentDate(_date) {
-  let currDate = _date ? _date : new Date();
-  let currMonth = currDate.getMonth() + 1;
+  let currDateObj = _date ? _date : new Date();
+  let currMonth = currDateObj.getMonth() + 1;
+  let currDate = currDateObj.getDate();
+
   if (currMonth < 10) {
     currMonth = `0${currMonth}`;
   }
-  
-  return currDate.getFullYear() + "-" + currMonth + "-" + currDate.getDate();
+  if (currDate < 10) {
+    currDate = `0${currDate}`;
+  }
+
+  return currDateObj.getFullYear() + "-" + currMonth + "-" + currDate;
+}
+
+function makeURLParams(params) {
+  return {
+    ...params,
+    fromdate: new Date(params.fromdate).getTime() / 1000,
+    todate: new Date(params.todate).getTime() / 1000
+  };
 }
 
 export default function Visualization() {
   const [params, setParams] = useState({
-    fromdate: currentDate(),
+    fromdate: "2021-03-01",
     todate: currentDate(),
     pagesize: 100,
     page: 1,
   });
+  const [results, updateResults] = useState();
 
   useEffect(function () {
-    getMovies({}, function (response) {
-      // debugger;
-      console.log(response.results);
-      // updateMovieList(function (currState) {
-      //   debugger;
-      //   const newState = {
-      //     ...currState,
-      //     fullList: currState.fullList.concat(response.results)
-      //   };
-      //   return newState;
-      // });
+    getResults(makeURLParams(params), function (response) {
+      console.log(response);
+      updateResults(response.items);
     });
   }, []);
 
   function onDateChange(ev) {
     let vad = ev.target.valueAsDate;
-    vad.setHours(0,0,0,0);
-    if (params.hasOwnProperty(ev.target.name)) {
-      setParams({
-        ...params,
-        [ev.target.name]: currentDate(vad)
-      });
+    if (vad) {
+      vad.setHours(0,0,0,0);
+      if (params.hasOwnProperty(ev.target.name)) {
+        setParams({
+          ...params,
+          [ev.target.name]: currentDate(vad)
+        });
+      }
     }
   }
 
   function onPageChange(ev) {
-    debugger;
     if (params.hasOwnProperty(ev.target.name)) {
       setParams({
         ...params,
@@ -56,7 +64,14 @@ export default function Visualization() {
       });
     }
   }
-  console.log(params.pagesize, params.page);
+
+  function fetchData() {
+    getResults(makeURLParams(params), function(response) {
+      updateResults(response.items);
+    })
+    
+  }
+
   return (
     <Container>
       <InputWrapper>
@@ -76,7 +91,11 @@ export default function Visualization() {
           <Label>Page</Label>
           <Input value={params.page} type="number" name="page" min="1" onChange={onPageChange} />
         </InputControl>
+        <InputControl>
+          <button onClick={fetchData}>Run Query</button>
+        </InputControl>
       </InputWrapper>
+      { results === undefined ? null : <ChartWrapper data={results} />}
     </Container>
   );
 }

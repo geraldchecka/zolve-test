@@ -23,7 +23,9 @@
     "react-dom": "~16.14.0",
     "sass": "~1.32.8",
     "styled-components": "~5.2.1",
-    "react-router-dom": "~5.2.0"
+    "react-router-dom": "~5.2.0",
+    "chart.js": "~2.9.4",
+    "react-chartjs-2": "~2.11.1"
   },
   "devDependencies": {
     "@babel/core": "~7.13.8",
