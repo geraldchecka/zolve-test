@@ -19,6 +19,22 @@ export default function Clipboard() {
     ev.preventDefault();
   }
 
+  function copyToClipboard() {
+    const clipID = document.getElementById("clip-value");
+    const el = document.createElement('textarea');
+    el.value = clipID.textContent;
+    document.body.appendChild(el);
+    el.select();
+    el.focus();
+    try {
+      let status = document.execCommand("copy");
+      document.body.removeChild(el);
+     }
+     catch(e) {
+       console.error("Error clipping content", e);
+     }
+  }
+
   var urlResult = url ? formatQueryValue(url) : null;
 
   return (
@@ -29,14 +45,12 @@ export default function Clipboard() {
           <Input defaultValue={url} type="text" name="clipboardvalue" onChange={onItemChange} />
         </InputControl>
         <InputControl>
-          <Button onClick={() => {}}>Copy to Clipboard</Button>
+          <Button onClick={copyToClipboard}>Copy to Clipboard</Button>
         </InputControl>
         <DisplayValue>
           <Label>q:</Label>
-          <ClipValue>
-            {urlResult && urlResult.map((item, i) => {
-              return <span key={i} style={{ marginRight: "10px" }}>{item}</span>;
-            })}
+          <ClipValue id="clip-value">
+            {urlResult && urlResult.join(" ")}
           </ClipValue>
         </DisplayValue>
       </InputWrapper>
