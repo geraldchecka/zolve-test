@@ -20,7 +20,7 @@ export default function Camera() {
   };
 
   useEffect(function() {
-    cameraRef.current = document.getElementById('player');
+    // cameraRef.current = document.getElementById('player');
     navigator.mediaDevices.getUserMedia(options)
       .then(stream => {
         cameraRef.current.srcObject = stream;
@@ -29,7 +29,13 @@ export default function Camera() {
 
   return (
     <Container>
-      <video id="player" controls autoPlay></video>
+      <video
+        id="player"
+        controls
+        autoPlay
+        playsInline 
+        muted
+        ref={cameraRef} />
     </Container>
   )
 }
