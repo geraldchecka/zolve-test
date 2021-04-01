@@ -30,7 +30,13 @@ module.exports = {
     host: "0.0.0.0",
     port: 9001,
     open: true,
-    disableHostCheck: true
+    disableHostCheck: true,
+    https: true,
+    // https: {
+    //   key: fs.readFileSync('/path/to/server.key'),
+    //   cert: fs.readFileSync('/path/to/server.crt'),
+    //   ca: fs.readFileSync('/path/to/ca.pem'),
+    // },
   },
   stats: {
     warnings: true,
