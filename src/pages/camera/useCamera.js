@@ -57,7 +57,6 @@ export default function useCamera(...otherOptions) {
     // );
     getUserMedia(options)
       .then(stream => {
-        debugger;
         cameraRef.current.srcObject = stream;
         console.log("I have been invoked");
       })
