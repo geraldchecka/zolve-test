@@ -13,4 +13,4 @@ https://www.w3.org/TR/mediacapture-streams/#mediadevices-interface-extensions
 - Wasted re-renders in index.jsx (~6). Figure out why it is rendering so many times
 - Use loadable or suspense for async loading
 - codesplit and chunk all the assets
-- 
+- Cache the chunked assets in the UI
