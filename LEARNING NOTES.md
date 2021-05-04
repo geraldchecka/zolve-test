@@ -14,3 +14,13 @@ https://www.w3.org/TR/mediacapture-streams/#mediadevices-interface-extensions
 - Use loadable or suspense for async loading
 - codesplit and chunk all the assets
 - Cache the chunked assets in the UI
+
+# Temp
+- [
+      "@babel/preset-react",
+      {
+        "runtime": "automatic",
+        "development": true,
+        "importSource": "@welldone-software/why-did-you-render"
+      }
+    ]
