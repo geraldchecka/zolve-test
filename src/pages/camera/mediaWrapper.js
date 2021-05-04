@@ -9,36 +9,17 @@ import { generateError } from '../../globals/utils';
 const supports = {
   getUserMedia: {
     status: false,
-    type: ""
+    type: "",
   },
   enumerateDevices: {
     status: false,
     type: "modern",
+  },
+  getSupportedConstraints: {
+    status: false,
+    type: "modern",
   }
 };
-
-/**
- * An object containing basic constraints supported by all popular browsers.
- * @returns {Object} Contains the necessary constraints
- */
- const getConstraints = function() {
-  return {
-    video: {
-      width: {
-        min: 640,
-        max: 1280,
-        ideal: 640,
-      },
-      height: {
-        min: 480,
-        max: 720,
-        ideal: 480,
-      },
-      facingMode: "user"
-    },
-    audio: true,
-  };
-}
 
 /**
  * As part of feature detection, generalize the cross-browser mediaDevices API.
@@ -69,6 +50,12 @@ const checkBrowserSupport = function() {
     supports.enumerateDevices.status = true;
     supports.enumerateDevices.type = "modern";
   }
+
+  // Check for getSupportedConstraints
+  if ('mediaDevices' in navigator && 'getSupportedConstraints' in navigator.mediaDevices) {
+    supports.getSupportedConstraints.status = true;
+    supports.getSupportedConstraints.type = "modern";
+  }
 }
 
 /**
@@ -80,10 +67,41 @@ const isSupported = function(query = "") {
   if (query === "getUserMedia") {
     return [supports.getUserMedia.status, supports.getUserMedia.type];
   }
-  else if (query === "enumerate") {
+  else if (query === "enumerateDevices") {
     return [supports.enumerateDevices.status, supports.enumerateDevices.type];
   }
+  else if (query === "getSupportedConstraints") {
+    return [supports.getSupportedConstraints.status, supports.getSupportedConstraints.type];
+  }
   return [undefined, query];
+}
+
+/**
+ * An object containing basic constraints supported by all popular browsers.
+ * @returns {Object} Contains the necessary constraints
+ */
+ export const getConstraints = function() {
+  return {
+    video: {
+      width: {
+        min: 640,
+        max: 1280,
+        ideal: 640,
+      },
+      height: {
+        min: 480,
+        max: 720,
+        ideal: 480,
+      },
+      facingMode: {
+        exact: "environment"
+      },
+      deviceId: {
+        exact: null
+      },
+    },
+    audio: true,
+  };
 }
 
 /**
@@ -91,8 +109,8 @@ const isSupported = function(query = "") {
  * @returns {Object} Contains list of devices segregated as audio or video.
  */
 export const getAllDevices = async function() {
-  const [status, type] = isSupported("getUserMedia");
-  let devices;
+  const [status, type] = isSupported("enumerateDevices");
+  let devices = [];
   
   function getTemplate(id, groupId, label) {
     return {
@@ -107,31 +125,48 @@ export const getAllDevices = async function() {
   }
   catch(e) {
     devices = [];
+    console.error(generateError(e));
   }
 
   return devices.reduce((acc, { deviceId, groupId, kind, label }, _idx, items) => {
     if (kind === "audioinput") {
-      acc.audio.input[deviceId] = getTemplate(deviceId, groupId, label);
+      acc.audio.input.push(getTemplate(deviceId, groupId, label));
     }
     else if (kind === "audiooutput") {
-      acc.audio.output[deviceId] = getTemplate(deviceId, groupId, label);
+      acc.audio.output.push(getTemplate(deviceId, groupId, label));
     }
     else if (kind === "videoinput") {
-      acc.video.input[deviceId] = getTemplate(deviceId, groupId, label);
+      acc.video.input.push(getTemplate(deviceId, groupId, label));
     }
     acc.deviceCount = items.length;
 
     return acc;
   }, {
     audio: {
-      input: {},
-      output: {}
+      input: [],
+      output: []
     },
     video: {
-      input: {},
+      input: [],
     },
     deviceCount: 0,
   });
+}
+
+/**
+ * 
+ * @returns {Object} Contains the properties of all supported constraints as supported by the browser
+ */
+export const getSupportedConstraints = function() {
+  const [status, type] = isSupported("getSupportedConstraints");
+  let constraints = {};
+  try {
+    constraints = navigator.mediaDevices.getSupportedConstraints();
+  }
+  catch(error) {
+    console.error(generateError(error));
+  }
+  return constraints;
 }
 
 /**
@@ -139,7 +174,7 @@ export const getAllDevices = async function() {
  * @param {Object} constraints Contains all the constraints that will be supported
  * @returns {Object} Promise
  */
-export const getUserMedia = async function (constraints = getConstraints()) {
+export const getUserMedia = async function (constraints) {
   let returnPromise;
   
   returnPromise = new Promise((resolve, reject) => {
