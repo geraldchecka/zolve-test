@@ -14,6 +14,8 @@ https://www.w3.org/TR/mediacapture-streams/#mediadevices-interface-extensions
 - Use loadable or suspense for async loading
 - codesplit and chunk all the assets
 - Cache the chunked assets in the UI
+- styledcomponent component architecture; make use of SC patterns, 'transient props, showForwardProps config'
+- architect your CSS (SMACS, S-C etc...)
 
 # Temp
 - [

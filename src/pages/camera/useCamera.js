@@ -1,17 +1,19 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { getUserMedia, getConstraints } from './mediaWrapper';
+import { getUserMedia, getConstraints, getSupportedConstraints } from './mediaWrapper';
 
 // write a custom eslint rule to throw error if anyone uses navigator.getUserMedia apart from mediaWrapper.js
 
 export default function useCamera(videoSource, facingMode) {
   const cameraRef = useRef(null);
-  // What all cameras or audio can be accessed?
+  const [ supportedConstraints ] = useState(function() {
+    return getSupportedConstraints();
+  });
 
   useEffect(function() {
     let constraints = getConstraints();
-
     constraints.video.deviceId.exact = videoSource;
     constraints.video.facingMode = facingMode;
+    console.log("Inside usermera useEffect", videoSource, facingMode);
 
     if (videoSource !== null) {
       getUserMedia(constraints)

@@ -7,7 +7,7 @@ export default function FacingMode({ value, onChangeHandler, supoprtedConstraint
     <SelectContainer value={value} onChange={onChangeHandler}>
       <option disabled value="select">Select</option>
       <option value="user">Front Camera</option>
-      <option value="environment">Rear Camera</option>
+      <option value="environment" disabled>Rear Camera</option>
     </SelectContainer>
   );
 }

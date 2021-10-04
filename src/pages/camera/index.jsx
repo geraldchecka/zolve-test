@@ -27,7 +27,8 @@ export default function Camera() {
   function facingModeChangeHandler(event) {
     setFacingMode(event.target.value);
   }
-
+  
+  console.log("camera index called");
   // Run the code within an iframe with security permissions
   return (
     <Container>
