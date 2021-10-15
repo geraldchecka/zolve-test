@@ -1,6 +1,7 @@
 import React, { useEffect, useRef } from "react";
 import Select from "./select";
 import FacingMode from "./facingMode";
+import Selfie from "./selfie";
 import useCamera from "./useCamera";
 import useControls from "./useControls";
 import { Container, ControlContainer, Button, Video } from "./camera.styled";
@@ -39,7 +40,7 @@ export default function Camera() {
       {/* Move the video component into a separate component */}
       <Video>
         <video
-          id="player"
+          id="camera"
           controls
           autoPlay
           playsInline 
@@ -47,6 +48,8 @@ export default function Camera() {
           ref={cameraRef}
         />
       </Video>
+      <canvas id="imageCanvas" width="300" height="300"></canvas>
+      <Selfie />
     </Container>
   );
 }
